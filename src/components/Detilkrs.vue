@@ -38,14 +38,13 @@
                     </router-link>
                 </li>
                 <li class="nav-item">
-                        <a href="#" class="nav-link" @click="logout">
-                            Logout
+                    <a href="#" class="nav-link logout" @click="logout">
+                        LOGOUT ]->
                         </a>
-                    </li>
-                </ul>
-            </div>
-            </div>
-    
+                </li>
+            </ul>
+        </div>
+        </div>
             <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
             <router-view></router-view>
             </main>
@@ -53,7 +52,7 @@
         </div>
 
         <div class="custom-container">
-        <h2 class="text-center">FORM Mata Kuliah</h2>
+        <h2 class="text-center">FORM HASIL PEMBELAJARAN</h2>
         <form @submit.prevent="simpan()">
             <div class="row justify-content-center">
             <div class="mb-3 form-group col-10">
@@ -96,7 +95,7 @@
             </div>
         </form>
     
-        <h3 style="text-align: center;">TABEL Detil KRS</h3>
+        <h3 style="text-align: center;">TABEL DETIL KRS</h3>
         <div class="row justify-content-center">
             <div class="col-10">
             <table class="table table-bordered">
@@ -162,7 +161,7 @@
     
         methods: {
         loadalldetilkrs() {
-            var url = 'http://127.0.0.1:8000/api/detilkrs';
+            var url = 'https://api-group13-prognet.manpits.xyz/api/detilkrs';
             var token = localStorage.getItem('token');
             var header = {'Authorization': 'Bearer ' + token};
             axios.get(url, { headers: header }).then(({ data }) => {
@@ -171,7 +170,7 @@
         },
     
         loadallkrs() {
-            var url = `http://127.0.0.1:8000/api/krs`;
+            var url = `https://api-group13-prognet.manpits.xyz/api/krs`;
             var token = localStorage.getItem('token');
             var header = {'Authorization': 'Bearer ' + token};
             axios.get(url, { headers: header }).then(response => {
@@ -183,7 +182,7 @@
         },
     
         loadallmahasiswa() {
-            var url = `http://127.0.0.1:8000/api/mahasiswa`;
+            var url = `https://api-group13-prognet.manpits.xyz/api/mahasiswa`;
             var token = localStorage.getItem('token');
             var header = {'Authorization': 'Bearer ' + token};
             axios.get(url, { headers: header }).then(response => {
@@ -195,7 +194,7 @@
         },
     
         loadallmatakuliah() {
-            var url = `http://127.0.0.1:8000/api/matakuliah`;
+            var url = `https://api-group13-prognet.manpits.xyz/api/matakuliah`;
             var token = localStorage.getItem('token');
             var header = {'Authorization': 'Bearer ' + token};
             axios.get(url, { headers: header }).then(response => {
@@ -217,7 +216,7 @@
         },
     
         remove(detilkrs) {
-            var url = `http://127.0.0.1:8000/api/detilkrs/${detilkrs.id}`;
+            var url = `https://api-group13-prognet.manpits.xyz/api/detilkrs/${detilkrs.id}`;
             var token = localStorage.getItem('token');
             var header = {'Authorization': 'Bearer ' + token};
             axios.delete(url, { headers: header }).then(() => {
@@ -229,7 +228,7 @@
         },
     
         edit(detilkrs) {
-            var url = `http://127.0.0.1:8000/api/detilkrs/${detilkrs.id}`;
+            var url = `https://api-group13-prognet.manpits.xyz/api/detilkrs/${detilkrs.id}`;
             var token = localStorage.getItem('token');
             var header = {'Authorization': 'Bearer ' + token};
             axios.get(url, { headers: header }).then(({ data }) => {
@@ -243,7 +242,7 @@
             var token = localStorage.getItem('token');
             var header = {'Authorization': 'Bearer ' + token};
             if (this.detilkrs.id === '') {
-            var url = 'http://127.0.0.1:8000/api/detilkrs';
+            var url = 'https://api-group13-prognet.manpits.xyz/api/detilkrs';
             axios.post(url, this.detilkrs, { headers: header }).then(() => {
                 console.log('Berhasil disimpan!');
                 this.loadalldetilkrs(); // Reload data after saving
@@ -253,7 +252,7 @@
             });
             } else {
             // Edit
-            var url = `http://127.0.0.1:8000/api/detilkrs/${this.detilkrs.id}`;
+            var url = `https://api-group13-prognet.manpits.xyz/api/detilkrs/${this.detilkrs.id}`;
             axios.put(url, this.detilkrs, { headers: header }).then(() => {
                 console.log('Berhasil di edit');
                 this.loadalldetilkrs(); // Reload data after editing
@@ -263,7 +262,7 @@
         },
 
         logout() {
-            var url = 'http://127.0.0.1:8000/api/logout';
+            var url = 'https://api-group13-prognet.manpits.xyz/api/logout';
             var token = localStorage.getItem('token');
             var header = {'Authorization': 'Bearer ' + token};
 
@@ -288,11 +287,11 @@
     
     <style>
     .custom-container {
-        margin-left: 5cm; /* You can adjust this value as needed */
+    margin-left: 5cm; /* You can adjust this value as needed */
     }
 
     .custom-font {
-        font-family: 'Dashboard', sans-serif;
+    font-family: 'Dashboard', sans-serif;
     }
     .sidebar {
         position: fixed;
@@ -313,12 +312,6 @@
         overflow-y: auto;
     }
     
-    .sidebar a {
-        display: block;
-        padding: 0.5rem 1rem;
-        color: #ffffff;
-    }
-    
     .sidebar a:hover {
         color: #ff0000;
         text-decoration: none;
@@ -327,5 +320,22 @@
     .navbar {
         z-index: 99;
     }
-    </style>
-    
+
+    .sidebar a {
+        display: block;
+        padding: 0.5rem 1rem;
+        color: #ffffff; /* Warna putih untuk tautan lainnya */
+        font-weight: normal;
+    }
+
+    .sidebar a.logout {
+        color: #ff0000; /* Warna merah untuk tautan "Logout" */
+        font-weight: bold;
+        margin-top: 310px;
+    }
+
+    .sidebar a:hover,
+    .sidebar a:visited {
+        text-decoration: none;
+    }
+</style>

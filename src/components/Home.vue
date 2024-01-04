@@ -39,8 +39,8 @@
                                 </router-link>
                             </li>
                             <li class="nav-item">
-                                <a href="#" class="nav-link" @click="logout">
-                                    Logout
+                                <a href="#" class="nav-link logout" @click="logout">
+                                    LOGOUT ]->
                                 </a>
                             </li>
                         </ul>
@@ -67,7 +67,7 @@ import axios from 'redaxios';
     
         methods: {
             logout() {
-            var url = 'http://127.0.0.1:8000/api/logout';
+            var url = 'https://api-group13-prognet.manpits.xyz/api/logout';
             var token = localStorage.getItem('token');
             var header = {'Authorization': 'Bearer ' + token};
 
@@ -80,10 +80,8 @@ import axios from 'redaxios';
         },
         }
     };
-
-    
 </script>
-    
+
 <style scoped>
     body {
         margin: 0;
@@ -140,5 +138,22 @@ import axios from 'redaxios';
     
     .navbar {
         z-index: 99;
+    }
+
+    .sidebar a {
+        display: block;
+        padding: 0.5rem 1rem;
+        color: #ffffff; /* Warna putih untuk tautan lainnya */
+        font-weight: normal;
+    }
+
+    .sidebar a.logout {
+        color: #ff0000; /* Warna merah untuk tautan "Logout" */
+        font-weight: bold;
+    }
+
+    .sidebar a:hover,
+    .sidebar a:visited {
+        text-decoration: none;
     }
 </style>

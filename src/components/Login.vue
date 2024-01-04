@@ -57,7 +57,7 @@
   
     methods: {
       login() {
-        var url = 'http://127.0.0.1:8000/api/login';
+        var url = 'https://api-group13-prognet.manpits.xyz/api/login';
         axios.post(url, this.user)
           .then(response => {
             console.log(response.data);
