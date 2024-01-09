@@ -14,13 +14,13 @@
                                 </router-link>
                             </li>
                             <li class="nav-item">
-                                <router-link to="/detilkrs" class="nav-link">
-                                Data Detail KRS
+                                <router-link to="/agama" class="nav-link">
+                                Data Agama Mahasiswa
                                 </router-link>
                             </li>
                             <li class="nav-item">
-                                <router-link to="/mahasiswa" class="nav-link">
-                                Data Mahasiswa
+                                <router-link to="/krs" class="nav-link">
+                                Data Krs
                                 </router-link>
                             </li>
                             <li class="nav-item">
@@ -29,13 +29,13 @@
                                 </router-link>
                             </li>
                             <li class="nav-item">
-                                <router-link to="/agama" class="nav-link">
-                                Data Agama Mahasiswa
+                                <router-link to="/mahasiswa" class="nav-link">
+                                Data Mahasiswa
                                 </router-link>
                             </li>
                             <li class="nav-item">
-                                <router-link to="/krs" class="nav-link">
-                                Data KRS 
+                                <router-link to="/detilkrs" class="nav-link">
+                                Data Detail Krs 
                                 </router-link>
                             </li>
                             <li class="nav-item">

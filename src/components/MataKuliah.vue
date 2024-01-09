@@ -14,13 +14,13 @@
                             </router-link>
                         </li>
                         <li class="nav-item">
-                            <router-link to="/detilkrs" class="nav-link">
-                            Data Detail KRS
+                            <router-link to="/agama" class="nav-link">
+                            Data Agama Mahasiswa
                             </router-link>
                         </li>
                         <li class="nav-item">
-                            <router-link to="/mahasiswa" class="nav-link">
-                            Data Mahasiswa
+                            <router-link to="/krs" class="nav-link">
+                            Data Krs
                             </router-link>
                         </li>
                         <li class="nav-item">
@@ -29,13 +29,13 @@
                             </router-link>
                         </li>
                         <li class="nav-item">
-                            <router-link to="/agama" class="nav-link">
-                            Data Agama Mahasiswa
+                            <router-link to="/mahasiswa" class="nav-link">
+                            Data Mahasiswa
                             </router-link>
                         </li>
                         <li class="nav-item">
-                            <router-link to="/krs" class="nav-link">
-                            Data KRS 
+                            <router-link to="/detilkrs" class="nav-link">
+                            Data Detil Krs 
                             </router-link>
                         </li>
                         <li class="nav-item">
@@ -80,7 +80,7 @@
             <select type="text" class="form-control" v-model="matakuliah.semester">
             <option value=""></option>
             <option v-for="(krs, index) in allkrs" :key="krs.id" :value="krs.semester">
-                {{ krs.semester }}
+                {{ krs.semester + '-' + krs.tahun }}
             </option>
             </select>
         </div>
@@ -93,13 +93,14 @@
         </div>
     </form>
 
+    <div class="custom-container">
     <h3 style="text-align: center;">TABEL Mata Kuliah</h3>
     <div class="row justify-content-center">
-        <div class="col-10">
-        <table class="table table-bordered">
+        <div class="col-10 table-container d-flex justify-content-center align-items-center">
+            <table class="table table-bordered">
             <thead>
             <tr>
-                <th class="text-center">Id</th>
+                <th class="text-center">NO</th>
                 <th class="text-center">Kode</th>
                 <th class="text-center">Mata Kuliah</th>
                 <th class="text-center">SKS</th>
@@ -109,7 +110,7 @@
             </thead>
             <tbody>
             <tr v-for="(matakuliah, index) in allmatakuliah" :key="matakuliah.id">
-                <td class="text-center">{{ matakuliah.id }}</td>
+                <td class="text-center">{{ index + 1 }}</td>
                 <td class="text-center">{{ matakuliah.kode }}</td>
                 <td class="text-center">{{ matakuliah.namamatakuliah }}</td>
                 <td class="text-center">{{ matakuliah.sks }}</td>
@@ -122,9 +123,12 @@
                 </td>
             </tr>
             </tbody>
-        </table>
+            </table>
         </div>
     </div>
+</div>
+
+>
     </div>
 </template>
 
@@ -201,6 +205,15 @@
         simpan() {
             var token = localStorage.getItem('token');
             var header = {'Authorization': 'Bearer ' + token};
+
+            const isKodeUnique = !this.allmatakuliah.some(m => m.kode === this.matakuliah.kode || m.namamatakuliah === this.matakuliah.namamatakuliah);
+
+            if (!isKodeUnique) {
+                const errorMessage = 'Mata Kuliah sudah ada di database!';
+                console.error(errorMessage);
+                return;
+            }
+
             if (this.matakuliah.id === '') {
             var url = 'https://api-group13-prognet.manpits.xyz/api/matakuliah';
             axios.post(url, this.matakuliah, { headers: header }).then(() => {
@@ -297,5 +310,10 @@
     .sidebar a:hover,
     .sidebar a:visited {
         text-decoration: none;
+    }
+
+    .table-container {
+        max-height: 500px; /* Adjust this value as needed */
+        overflow-y: auto;
     }
 </style>

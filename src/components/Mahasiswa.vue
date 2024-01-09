@@ -14,13 +14,13 @@
                             </router-link>
                         </li>
                         <li class="nav-item">
-                            <router-link to="/detilkrs" class="nav-link">
-                            Data Detail KRS
+                            <router-link to="/agama" class="nav-link">
+                            Data Agama Mahasiswa
                             </router-link>
                         </li>
                         <li class="nav-item">
-                            <router-link to="/mahasiswa" class="nav-link">
-                            Data Mahasiswa
+                            <router-link to="/krs" class="nav-link">
+                            Data Krs
                             </router-link>
                         </li>
                         <li class="nav-item">
@@ -29,13 +29,13 @@
                             </router-link>
                         </li>
                         <li class="nav-item">
-                            <router-link to="/agama" class="nav-link">
-                            Data Agama Mahasiswa
+                            <router-link to="/mahasiswa" class="nav-link">
+                            Data Mahasiswa
                             </router-link>
                         </li>
                         <li class="nav-item">
-                            <router-link to="/krs" class="nav-link">
-                            Data KRS 
+                            <router-link to="/detilkrs" class="nav-link">
+                            Data Detil Krs 
                             </router-link>
                         </li>
                         <li class="nav-item">
@@ -98,7 +98,7 @@
                 <table class="table table-bordered">
                     <thead>
                         <tr>
-                            <th class="text-center">Id</th>
+                            <th class="text-center">NO</th>
                             <th class="text-center">NIM</th>
                             <th class="text-center">Nama Mahasiswa</th>
                             <th class="text-center">Alamat</th>
@@ -109,7 +109,7 @@
                     </thead>
                     <tbody>
                         <tr v-for="(mahasiswa, index) in allmahasiswa" :key="mahasiswa.id">
-                            <td class="text-center">{{ mahasiswa.id }}</td>
+                            <td class="text-center">{{ index + 1 }}</td>
                             <td class="text-center">{{ mahasiswa.nim }}</td>
                             <td class="text-center">{{ mahasiswa.nama }}</td>
                             <td class="text-center">{{ mahasiswa.alamat }}</td>
@@ -146,8 +146,8 @@
                 'agama_id': '',
             },
             allagama:[],
-        }
-    },
+            }
+        },
     
     created() {
         console.log('Created!');
@@ -204,10 +204,23 @@
     simpan() {
         var token = localStorage.getItem('token');
         var header = {'Authorization': 'Bearer ' + token};
+
+        const isNimUnique = !this.allmahasiswa.some(m => m.nim === this.mahasiswa.nim);
+
+        if (!isNimUnique) {
+            const errorMessage = 'NIM sudah ada di database!';
+            console.error(errorMessage);
+
+            this.showNotification(errorMessage, 'error');
+
+            return;
+        }
+        
         if (this.mahasiswa.id === '') {
             var url = 'https://api-group13-prognet.manpits.xyz/api/mahasiswa';
             axios.post(url, this.mahasiswa, { headers: header }).then(() => {
                 console.log('Berhasil disimpan!');
+                this.showNotification('Data saved successfully!', 'success');
                 this.loadallmahasiswa(); // reload data setelah simpan
                 this.clear();
             }).catch((error) => {
@@ -218,9 +231,27 @@
             var url = `https://api-group13-prognet.manpits.xyz/mahasiswa/${this.mahasiswa.id}`;
             axios.put(url, this.mahasiswa, { headers: header }).then(() => {
                 console.log('Berhasil di edit');
+                this.showNotification('Data edited successfully!', 'success');
                 this.loadallmahasiswa(); // reload data setelah edit
                 this.clear();
             });
+        }
+    },
+
+    showNotification(message, type) {
+        // Check if the Notification API is supported
+        if ('Notification' in window) {
+            Notification.requestPermission().then(permission => {
+                if (permission === 'granted') {
+                    new Notification(type === 'success' ? 'Success' : 'Error', {
+                        body: message,
+                        icon: type === 'success' ? 'success-icon.png' : 'error-icon.png',
+                    });
+                }
+            });
+        } else {
+            // Fallback to window.alert if Notification API is not supported
+            alert(message);
         }
     },
 

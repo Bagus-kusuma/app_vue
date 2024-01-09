@@ -46,6 +46,7 @@
   import axios from 'redaxios';
   
   export default {
+    name: 'Login',
     data() {
       return {
         user: {

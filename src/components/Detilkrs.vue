@@ -13,13 +13,13 @@
                     </router-link>
                 </li>
                 <li class="nav-item">
-                    <router-link to="/detilkrs" class="nav-link">
-                    Data Detail KRS
+                    <router-link to="/agama" class="nav-link">
+                    Data Agama Mahasiswa
                     </router-link>
                 </li>
                 <li class="nav-item">
-                    <router-link to="/mahasiswa" class="nav-link">
-                    Data Mahasiswa
+                    <router-link to="/krs" class="nav-link">
+                    Data Krs
                     </router-link>
                 </li>
                 <li class="nav-item">
@@ -28,13 +28,13 @@
                     </router-link>
                 </li>
                 <li class="nav-item">
-                    <router-link to="/agama" class="nav-link">
-                    Data Agama Mahasiswa
+                    <router-link to="/mahasiswa" class="nav-link">
+                    Data Mahasiswa
                     </router-link>
                 </li>
                 <li class="nav-item">
-                    <router-link to="/krs" class="nav-link">
-                    Data KRS 
+                    <router-link to="/detilkrs" class="nav-link">
+                    Data Detail Krs 
                     </router-link>
                 </li>
                 <li class="nav-item">
@@ -60,28 +60,30 @@
                 <select type="text" class="form-control" v-model="detilkrs.krs_id">
                 <option value=""></option>
                 <option v-for="(krs, index) in allkrs" :key="krs.id" :value="krs.id">
-                    {{ krs.id }}
+                    {{ krs.tahun + '-' +krs.semester }}
                 </option>
                 </select>
             </div>
             <div class="mb-3 form-group col-10">
                 <label>Mahasiswa</label>
                 <select type="text" class="form-control" v-model="detilkrs.mahasiswa_id">
-                <option value=""></option>
-                <option v-for="(mahasiswa, index) in allmahasiswa" :key="mahasiswa.id" :value="mahasiswa.id">
-                    {{ mahasiswa.nama }}
-                </option>
+                    <option value=""></option>
+                    <option v-for="(mahasiswa, index) in allmahasiswa" :key="mahasiswa.id" :value="mahasiswa.id">
+                        {{ mahasiswa.nama + ' - ' + mahasiswa.nim }}
+                    </option>
                 </select>
             </div>
-            <div class="mb-3 form-group col-10">
+
+            <div class="mb-3 form-group col-10" style="max-height: 200px; overflow-y: auto;">
                 <label>Mata Kuliah</label>
                 <select type="text" class="form-control" v-model="detilkrs.matakuliah_id">
-                <option value=""></option>
-                <option v-for="(matakuliah, index) in allmatakuliah" :key="matakuliah.id" :value="matakuliah.id">
-                    {{ matakuliah.namamatakuliah }}
-                </option>
+                    <option value=""></option>
+                    <option v-for="(matakuliah, index) in allmatakuliah" :key="matakuliah.id" :value="matakuliah.id">
+                        {{ matakuliah.namamatakuliah + ' - ' + matakuliah.kode }}
+                    </option>
                 </select>
             </div>
+
             <div class="mb-3 form-group col-10">
                 <label>Nilai</label>
                 <input type="text" class="form-control" v-model="detilkrs.nilai">
@@ -101,26 +103,21 @@
             <table class="table table-bordered">
                 <thead>
                 <tr>
-                    <th class="text-center">Id</th>
-                    <th class="text-center">Id KRS</th>
-                    <th class="text-center">Mahasiswa</th>
-                    <th class="text-center">Mata Kuliah</th>
-                    <th class="text-center">Nilai</th>
+                    <th class="text-center">NO</th>
+                    <th class="text-center">NIM</th>
+                    <th class="text-center">Nama Mahasiswa</th>
                     <th class="text-center">Action</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="(detilkrs, index) in alldetilkrs" :key="detilkrs.id">
-                    <td class="text-center">{{ detilkrs.id }}</td>
-                    <td class="text-center">{{ detilkrs.krs_id }}</td>
-                    <td class="text-center">{{ getMahasiswa(detilkrs.mahasiswa_id) }}</td>
-                    <td class="text-center">{{ getMatakuliah(detilkrs.matakuliah_id) }}</td>
-                    <td class="text-center">{{ detilkrs.nilai }}</td>
+                <tr v-for="(mahasiswa, index) in allmahasiswa" :key="mahasiswa.id">
+                    <td class="text-center">{{ index + 1 }}</td>
+                    <td class="text-center">{{ mahasiswa.nim }}</td>
+                    <td class="text-center">{{ mahasiswa.nama }}</td>
                     <td class="text-center">
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-warning" @click="edit(detilkrs)">EDIT</button>
-                        <button type="button" class="btn btn-danger" @click="remove(detilkrs)">DELETE</button>
-                    </div>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-primary" @click="redirectToDetilKrsNilai(mahasiswa.id)">Detail</button>
+                        </div>
                     </td>
                 </tr>
                 </tbody>
@@ -147,6 +144,14 @@
             },
             allkrs: [],
             allmahasiswa: [],
+            mahasiswa: {
+            'id': '',
+            'nim': '',
+            'nama': '',
+            'alamat': '',
+            'lahir': '',
+            'agama_id': '',
+            },
             allmatakuliah: [],
         };
         },
@@ -160,6 +165,7 @@
         },
     
         methods: {
+
         loadalldetilkrs() {
             var url = 'https://api-group13-prognet.manpits.xyz/api/detilkrs';
             var token = localStorage.getItem('token');
@@ -205,37 +211,19 @@
             });
         },
     
-        getMahasiswa(detilkrs_mahasiswa_id) {
+        getNamaMahasiswa(detilkrs_mahasiswa_id) {
             const mahasiswa = this.allmahasiswa.find(item => item.id === detilkrs_mahasiswa_id);
             return mahasiswa ? mahasiswa.nama : 'N/A';
+        },
+
+        getIdMahasiswa(detilkrs_mahasiswa_id) {
+            const mahasiswa = this.allmahasiswa.find(item => item.id === detilkrs_mahasiswa_id);
+            return mahasiswa ? mahasiswa.nim : 'N/A';
         },
     
         getMatakuliah(detilkrs_matakuliah_id) {
             const matakuliah = this.allmatakuliah.find(item => item.id === detilkrs_matakuliah_id);
             return matakuliah ? matakuliah.namamatakuliah : 'N/A';
-        },
-    
-        remove(detilkrs) {
-            var url = `https://api-group13-prognet.manpits.xyz/api/detilkrs/${detilkrs.id}`;
-            var token = localStorage.getItem('token');
-            var header = {'Authorization': 'Bearer ' + token};
-            axios.delete(url, { headers: header }).then(() => {
-            console.log('Berhasil dihapus!');
-            this.loadalldetilkrs(); // perbaruin data
-            }).catch((error) => {
-            console.error('Gagal menghapus:', error);
-            });
-        },
-    
-        edit(detilkrs) {
-            var url = `https://api-group13-prognet.manpits.xyz/api/detilkrs/${detilkrs.id}`;
-            var token = localStorage.getItem('token');
-            var header = {'Authorization': 'Bearer ' + token};
-            axios.get(url, { headers: header }).then(({ data }) => {
-            console.log(data);
-            this.detilkrs = data;
-            console.log(this.detilkrs);
-            });
         },
     
         simpan() {
@@ -272,6 +260,11 @@
             }).catch((error) => {
                 console.error('Failed to logout:', error);
             });
+        },
+
+        redirectToDetilKrsNilai(mahasiswa_id) {
+            localStorage.setItem('mhs_id', mahasiswa_id);
+            this.$router.push({ name: 'detilKrsNilai' });
         },
     
         clear() {

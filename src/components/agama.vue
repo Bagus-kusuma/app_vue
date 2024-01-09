@@ -14,13 +14,13 @@
                         </router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link to="/detilkrs" class="nav-link">
-                        Data Detail KRS
+                        <router-link to="/agama" class="nav-link">
+                            Data Agama Mahasiswa
                         </router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link to="/mahasiswa" class="nav-link">
-                        Data Mahasiswa
+                        <router-link to="/krs" class="nav-link">
+                            Data Krs
                         </router-link>
                     </li>
                     <li class="nav-item">
@@ -29,13 +29,13 @@
                         </router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link to="/agama" class="nav-link">
-                        Data Agama Mahasiswa
+                        <router-link to="/mahasiswa" class="nav-link">
+                        Data Mahasiswa
                         </router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link to="/krs" class="nav-link">
-                        Data KRS 
+                        <router-link to="/detilkrs" class="nav-link">
+                        Data Detil KRS 
                         </router-link>
                     </li>
                     <li class="nav-item">
@@ -76,14 +76,14 @@
             <table class="table table-bordered">
                 <thead>
                 <tr>
-                    <th class="text-center">Id</th>
+                    <th class="text-center">No</th>
                     <th class="text-center">Agama</th>
                     <th class="text-center">Action</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr v-for="(agama, index) in allagama" :key="agama.id">
-                    <td class="text-center">{{ agama.id }}</td>
+                    <td class="text-center">{{ index + 1 }}</td>
                     <td class="text-center">{{ agama.agama }}</td>
                     <td class="text-center">
                     <div class="btn-group">
@@ -153,6 +153,15 @@
         simpan() {
             var token = localStorage.getItem('token');
             var header = {'Authorization': 'Bearer ' + token};
+
+            const isAgamaUnique = !this.allagama.some(m => m.agama.toLowerCase() === this.agama.agama.toLowerCase());
+
+            if (!isAgamaUnique) {
+                const errorMessage = 'Agama ini sudah ada di database!';
+                console.error(errorMessage);
+                return;
+            }
+
             if (this.agama.id === '') {
             var url = 'https://api-group13-prognet.manpits.xyz/api/agama';
             axios.post(url, this.agama, { headers: header }).then(() => {

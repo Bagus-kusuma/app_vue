@@ -14,13 +14,13 @@
                         </router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link to="/detilkrs" class="nav-link">
-                        Data Detail KRS
+                        <router-link to="/agama" class="nav-link">
+                        Data Agama Mahasiswa
                         </router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link to="/mahasiswa" class="nav-link">
-                        Data Mahasiswa
+                        <router-link to="/krs" class="nav-link">
+                        Data Krs
                         </router-link>
                     </li>
                     <li class="nav-item">
@@ -29,13 +29,13 @@
                         </router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link to="/agama" class="nav-link">
-                        Data Agama Mahasiswa
+                        <router-link to="/Mahasiswa" class="nav-link">
+                        Data Mahasiswa
                         </router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link to="/krs" class="nav-link">
-                        Data KRS 
+                        <router-link to="/detilkrs" class="nav-link">
+                        Data Detil Krs
                         </router-link>
                     </li>
                     <li class="nav-item">
@@ -60,7 +60,7 @@
             <div class="row justify-content-center">
             <div class="mb-3 form-group col-10">
                 <label>Tahun</label>
-                <input type="text" class="form-control" v-model="krs.tahun">
+                <input type="text" class="form-control" v-model="krs.tahun" placeholder="Contoh: 2022/2023">
             </div>
             <div class="mb-3 form-group col-10">
                 <label>Semester</label>
@@ -81,7 +81,7 @@
             <table class="table table-bordered">
                 <thead>
                 <tr>
-                    <th class="text-center">Id</th>
+                    <th class="text-center">NO</th>
                     <th class="text-center">Tahun</th>
                     <th class="text-center">Semester</th>
                     <th class="text-center">Action</th>
@@ -89,7 +89,7 @@
                 </thead>
                 <tbody>
                 <tr v-for="(krs, index) in allkrs" :key="krs.id">
-                    <td class="text-center">{{ krs.id }}</td>
+                    <td class="text-center">{{ index + 1 }}</td>
                     <td class="text-center">{{ krs.tahun }}</td>
                     <td class="text-center">{{ krs.semester }}</td>
                     <td class="text-center">
@@ -162,6 +162,15 @@
         simpan() {
             var token = localStorage.getItem('token');
             var header = {'Authorization': 'Bearer ' + token};
+
+            const isKrsUnique = !this.allkrs.some(m => m.tahun === this.krs.tahun && m.semester === this.krs.semester);
+
+            if (!isKrsUnique) {
+                const errorMessage = 'KRS sudah ada di database!';
+                console.error(errorMessage);
+                return;
+            }
+
             if (this.krs.id === '') {
             var url = 'https://api-group13-prognet.manpits.xyz/api/krs';
             axios.post(url, this.krs, { headers: header }).then(() => {
