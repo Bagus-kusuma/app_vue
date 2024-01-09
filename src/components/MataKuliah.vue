@@ -313,7 +313,7 @@
     }
 
     .table-container {
-        max-height: 500px; /* Adjust this value as needed */
+        max-height: 600px; /* Adjust this value as needed */
         overflow-y: auto;
     }
 </style>
